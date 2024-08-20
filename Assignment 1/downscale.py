@@ -51,13 +51,8 @@ def upSampleTo1024(img):
             for x in range(1024):
                 newImageArray[y, x] = image[y // scale, x // scale]
         upSampledImages.append(pillow.fromarray(newImageArray))
-
-
     return upSampledImages
 
-# Change the gray level of an 8-bit gray level image (that has initially 256 gray 
-# levels) to 128, 64, and 32 gray level images, respectively. Save each image to 
-# show the effect. 
 
 img = pillow.open('Assignment 1/images/moment.jpg')
 downSampledImages = downSample(img)
