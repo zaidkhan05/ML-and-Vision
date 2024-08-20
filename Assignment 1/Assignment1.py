@@ -76,26 +76,30 @@ def upSampleTo1024(img):
         ogSize = image.shape[0]
 
         scale = 1024 // ogSize
-        # for y in range(1024):
-        #     for x in range(1024):
-        #         newImageArray[y, x] = image[y // scale, x // scale]
+        for y in range(1024):
+            for x in range(1024):
+                newImageArray[y, x] = image[y // scale, x // scale]
+        # for y in range(ogSize):
+        #     for x in range(ogSize):
+        #         newImageArray[y*scale-scale+1: y*scale+1, x*scale-scale+1: x*scale+1] = image[y, x]
+        upSampledImages.append(pillow.fromarray(newImageArray))
         # print(ogSize)
-        if ogSize == 512:
-            for y in range(ogSize):
-                for x in range(ogSize):
-                    newImageArray[y*2-1: y*2+1, x*2-1: x*2+1] = image[y, x]
-            upSampledImages.append(pillow.fromarray(newImageArray))
-        elif ogSize == 256:
-            for y in range(ogSize):
-                for x in range(ogSize):
-                    newImageArray[y*4-3:y*4+1, x*4-3:x*4+1] = image[y, x]
+        # if ogSize == 512:
+        #     for y in range(ogSize):
+        #         for x in range(ogSize):
+        #             newImageArray[y*2-1: y*2+1, x*2-1: x*2+1] = image[y, x]
+        #     upSampledImages.append(pillow.fromarray(newImageArray))
+        # elif ogSize == 256:
+        #     for y in range(ogSize):
+        #         for x in range(ogSize):
+        #             newImageArray[y*4-3:y*4+1, x*4-3:x*4+1] = image[y, x]
 
-            upSampledImages.append(pillow.fromarray(newImageArray))
-        elif ogSize == 128:
-            for y in range(ogSize):
-                for x in range(ogSize):
-                    newImageArray[y*8-7:y*8+1, x*8-7:x*8+1] = image[y, x]
-            upSampledImages.append(pillow.fromarray(newImageArray))
+        #     upSampledImages.append(pillow.fromarray(newImageArray))
+        # elif ogSize == 128:
+        #     for y in range(ogSize):
+        #         for x in range(ogSize):
+        #             newImageArray[y*8-7:y*8+1, x*8-7:x*8+1] = image[y, x]
+            # upSampledImages.append(pillow.fromarray(newImageArray))
 
     return upSampledImages
 
@@ -103,12 +107,12 @@ def upSampleTo1024(img):
 # levels) to 128, 64, and 32 gray level images, respectively. Save each image to 
 # show the effect. 
 
-img = pillow.open('Assignment 1/kokomi.jpg')
+img = pillow.open('Assignment 1/images/rose.jpg')
 downSampledImages = downSample(img)
-downSampledImages[0].save('Assignment 1/kokomi512x512.jpg')
-downSampledImages[1].save('Assignment 1/kokomi256x256.jpg')
-downSampledImages[2].save('Assignment 1/kokomi128x128.jpg')
+downSampledImages[0].save('Assignment 1/images/rose512x512.jpg')
+downSampledImages[1].save('Assignment 1/images/rose256x256.jpg')
+downSampledImages[2].save('Assignment 1/images/rose128x128.jpg')
 upSampledImages = upSampleTo1024(downSampledImages)
-upSampledImages[0].save('Assignment 1/kokomi512x512to1024x1024.jpg')
-upSampledImages[1].save('Assignment 1/kokomi256x256to1024x1024.jpg')
-upSampledImages[2].save('Assignment 1/kokomi128x128to1024x1024.jpg')
+upSampledImages[0].save('Assignment 1/images/rose512x512to1024x1024.jpg')
+upSampledImages[1].save('Assignment 1/images/rose256x256to1024x1024.jpg')
+upSampledImages[2].save('Assignment 1/images/rose128x128to1024x1024.jpg')
