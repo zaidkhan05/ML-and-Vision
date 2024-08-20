@@ -12,20 +12,51 @@ img = pillow.open('Assignment 1/rose.jpg')
 # the effect.
 
 # Down-sample the image
+# if len(image_array.shape) == 3:
+#         # RGB image
+#         downsampled = np.zeros((newSideSize, newSideSize, image_array.shape[2]), dtype=np.uint8)
+#     else:
+#         # Grayscale image
+#         downsampled = np.zeros((newSideSize, newSideSize), dtype=np.uint8)
+    
+#     scale = image_array.shape[0] // newSideSize
+    
+#     for i in range(newSideSize):
+#         for j in range(newSideSize):
+#             block = image_array[i*scale:(i+1)*scale, j*scale:(j+1)*scale]
+#             downsampled[i, j] = np.mean(block)
 def downSample(img):
     downSampledImages = []
+    image = np.array(img)
     for i in range(3):
-        image = np.array(img)
         sideSize = image.shape[0]
         newSideSize = sideSize // 2
+        # if len(image.shape) == 3:
+        #     # RGB image
+        #     newImageArray = np.zeros((newSideSize, newSideSize, image.shape[2]), dtype=np.uint8)
+        # else:
+        #     # Grayscale image
+        #     newImageArray = np.zeros((newSideSize, newSideSize), dtype=np.uint8)
+        
+        # scale = image.shape[0] // newSideSize
+        
+        # for i in range(newSideSize):
+        #     for j in range(newSideSize):
+        #         block = image[i*scale:(i+1)*scale, j*scale:(j+1)*scale]
+        #         newImageArray[i, j] = np.mean(block)
+        #         if i == 24 and j == 24:
+        #             print(block)
 
         newImageArray = np.zeros((newSideSize, newSideSize), dtype=np.uint8)
         for y in range(newSideSize):
             for x in range(newSideSize):
-                newVal = (image[y*2-1,x*2-1]+image[y * 2, x * 2]+image[y*2-1,x*2]+image[y*2,x*2-1]) // 4
-                newImageArray[y, x] = newVal
+                newVal = ((image[y*2,x*2]*.1+image[y * 2, x * 2+1]*.1)/2 +(image[y*2+1,x*2]*.1+image[y*2+1,x*2+1]*.1)/2)/2
+                if y == 25 and x == 25:
+                    print(newVal)
+                newImageArray[y, x] = newVal/.1
+        # newImageArray = image[::2, ::2]
         downSampledImages.append(pillow.fromarray(newImageArray))
-        img = newImageArray
+        image = newImageArray
 
 
     return downSampledImages
@@ -40,13 +71,18 @@ def upSampleTo1024(img):
         ogSize = image.shape[0]
 
         newImageArray = np.zeros((1024, 1024), dtype=np.uint8)
+        # scale = 1024 // ogSize
+        # for y in range(1024):
+        #     for x in range(1024):
+        #         newImageArray[y, x] = image[y // scale, x // scale]
         if ogSize == 512:
             for y in range(ogSize):
                 for x in range(ogSize):
-                    newImageArray[y*2-1,x*2-1] = image[y, x]
-                    newImageArray[y * 2, x * 2] = image[y, x]
-                    newImageArray[y*2-1,x*2] = image[y, x]
-                    newImageArray[y*2,x*2-1] = image[y, x]
+                    # newImageArray[y*2-1,x*2-1] = image[y, x]
+                    # newImageArray[y * 2, x * 2] = image[y, x]
+                    # newImageArray[y*2-1,x*2] = image[y, x]
+                    # newImageArray[y*2,x*2-1] = image[y, x]
+                    newImageArray[y*2-1: y*2+1, x*2-1: x*2+1] = image[y, x]
             upSampledImages.append(pillow.fromarray(newImageArray))
         elif ogSize == 256:
             for y in range(ogSize):
