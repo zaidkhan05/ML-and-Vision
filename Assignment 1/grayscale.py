@@ -4,16 +4,25 @@ import numpy as np
 # Change the gray level of an 8-bit gray level image (that has initially 256 gray 
 # levels) to 128, 64, and 32 gray level images, respectively. Save each image to 
 # show the effect. 
-def reduce_gray_levels(image_array, num_levels):
+def reduce_gray_levels(image_array):
     # Initialize a new array with the same shape as the original image
+    finalizedImages = []
     reduced_image = np.zeros_like(image_array)
-    
-    # Calculate the quantization factor
-    factor = 256 // num_levels
-    # Reduce gray levels by integer division
-    reduced_image = image_array // factor
-    # return reduced_image
-    return reduced_image
+    for i in range(3):
+        #1,2,3
+        factor = i
+        scale = 2
+        for y in range(factor):
+            scale = scale*2
+        #downscale the image values by 2,4,8 to get them from 256 to 128,64,32
+        reduced_image = image_array // scale
+
+        # print(scale)
+        # Convert the numpy array to a PIL image
+        finalImage = Image.fromarray(reduced_image)
+        #append the image to the list of images
+        finalizedImages.append(finalImage)
+    return finalizedImages
     
     
 
@@ -23,11 +32,8 @@ image = Image.open(image_path).convert("L")  # Ensure it's grayscale
 imageArray = np.array(image)
 
 # Reduce to 128, 64, and 32 gray levels manually
-reduced_128 = reduce_gray_levels(imageArray, 128)
-reduced_64 = reduce_gray_levels(imageArray, 64)
-reduced_32 = reduce_gray_levels(imageArray, 32)
-
-# Convert numpy arrays back to images and save
-Image.fromarray(reduced_128).save("roseAs128.jpg")
-Image.fromarray(reduced_64).save("roseAs64.jpg")
-Image.fromarray(reduced_32).save("roseAs32.jpg")
+reducedImages = reduce_gray_levels(imageArray)
+#save the images
+for i in range(3):
+    reducedImages[i].save(f"Assignment 1/images/rose_{2**(7-i)}.jpg")
+    # print(2**(7-i))
