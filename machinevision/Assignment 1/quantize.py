@@ -8,11 +8,14 @@ def quantizer(image_array):
     # Initialize a new array with the same shape as the original image
     finalizedImages = []
     reduced_image = np.zeros_like(image_array)
+    # Loop through for 7-1 bits
     for i in range(7):
+        # Calculate the number of levels and the quantization
         bits = 7 - i
         levels = 2 ** bits
         quantization_step = 256 // levels
         print(quantization_step)
+        # integer division of the matrix by the quantization step, then multiplying by the quantization step to brighten the image
         quantized_image_np = (image_array // quantization_step) * quantization_step
         reduced_image = quantized_image_np
 
@@ -22,6 +25,8 @@ def quantizer(image_array):
         
     return finalizedImages
 
+#Make a 4x2 image with the original image and the upsampled downsampled images
+#not required so I used in built functions but it is a nice way to see the difference
 def fullComparisonOfFinalImages(reducedImages, img):
     # Initialize a new array to hold all the images
     allImages = []
@@ -30,7 +35,7 @@ def fullComparisonOfFinalImages(reducedImages, img):
     # Append the upsampled images to the array
     for i in range(reducedImages.__len__()):
         allImages.append(reducedImages[i])
-    # Create a new image with a large enough to contain all images
+    # Create a new image large enough to contain all images
     x, y = img.size
     newImage = Image.new("RGB", (x * 4, y*2))
     # Paste the images into the new image
