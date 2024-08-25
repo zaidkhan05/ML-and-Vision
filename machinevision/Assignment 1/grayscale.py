@@ -40,8 +40,6 @@ def reduce_gray_levels(image, howmany):
         # image_array
     return finalizedImages
 
-def quantize(imageArray):
-    finalImages = []
 
 
     
