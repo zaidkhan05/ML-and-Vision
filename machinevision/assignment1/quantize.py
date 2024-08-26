@@ -51,12 +51,12 @@ def fullComparisonOfFinalImages(reducedImages, img):
             y_offset += y
         x_offset += x
     # Save the new image 
-    newImage.save("machinevision/Assignment 1/comparisons/rosequantizecomparison.jpg")
+    newImage.save("machinevision/assignment1/comparisons/rosequantizecomparison.jpg")
     
     
 
 # Load the original image
-image_path = "machinevision/Assignment 1/images/rose.jpg"
+image_path = "machinevision/assignment1/images/rose.jpg"
 image = Image.open(image_path).convert("L")  # Ensure it's grayscale
 imageArray = np.array(image)
 
@@ -64,6 +64,6 @@ imageArray = np.array(image)
 reducedImages = quantizer(imageArray)
 #save the images
 for i in range(reducedImages.__len__()):
-    reducedImages[i].save(f"machinevision/Assignment 1/images/rosequantizeas{2**(7-i)}.jpg")
+    reducedImages[i].save(f"machinevision/assignment1/images/rosequantizeas{2**(7-i)}.jpg")
     # print(2**(7-i))
 fullComparisonOfFinalImages(reducedImages, image)

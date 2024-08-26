@@ -5,7 +5,7 @@ from PIL import Image as pillow
 
 
 # Down-sample any color or grayscale image from a 1024x1024 pixel-sized image 
-# (such as ayaka.jpg) to 512x512, 256x256, 128x128, respectively. Then, up-sample 
+# (such as rose.jpg) to 512x512, 256x256, 128x128, respectively. Then, up-sample 
 # the images generated before, back to 1024x1024 pixels. Save each image to show 
 # the effect.
 
@@ -93,22 +93,22 @@ def fullComparisonOfFinalImages(upSampledImages, img):
             y_offset += 1024
         x_offset += 1024
     # Save the new image
-    newImage.save("machinevision/Assignment 1/comparisons/ayakacomparison.jpg")
+    newImage.save("machinevision/assignment1/comparisons/rosecomparison.jpg")
 
 
 # Load the original image
-img = pillow.open('machinevision/Assignment 1/images/ayaka.jpg')
+img = pillow.open('machinevision/Assignment1/images/rose.jpg')
 # Down-sample the image to 512x512, 256x256, and 128x128 pixels
 downSampledImages = downSample(img)
 # Save the down-sampled images
-downSampledImages[0].save('machinevision/Assignment 1/images/ayaka512x512.jpg')
-downSampledImages[1].save('machinevision/Assignment 1/images/ayaka256x256.jpg')
-downSampledImages[2].save('machinevision/Assignment 1/images/ayaka128x128.jpg')
+downSampledImages[0].save('machinevision/assignment1/images/rose512x512.jpg')
+downSampledImages[1].save('machinevision/assignment1/images/rose256x256.jpg')
+downSampledImages[2].save('machinevision/assignment1/images/rose128x128.jpg')
 # Up-sample the images back to 1024x1024 pixels
 upSampledImages = upSampleTo1024(downSampledImages)
-# Save the up-sampled images
-upSampledImages[0].save('machinevision/Assignment 1/images/ayaka512x512to1024x1024.jpg')
-upSampledImages[1].save('machinevision/Assignment 1/images/ayaka256x256to1024x1024.jpg')
-upSampledImages[2].save('machinevision/Assignment 1/images/ayaka128x128to1024x1024.jpg')
+# Save the up-sampled images2
+upSampledImages[0].save('machinevision/assignment1/images/rose512x512to1024x1024.jpg')
+upSampledImages[1].save('machinevision/assignment1/images/rose256x256to1024x1024.jpg')
+upSampledImages[2].save('machinevision/assignment1/images/rose128x128to1024x1024.jpg')
 # Compare the original image with the up-sampled images
 fullComparisonOfFinalImages(upSampledImages, img)
