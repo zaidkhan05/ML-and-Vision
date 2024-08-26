@@ -60,7 +60,7 @@ image_path = "machinevision/assignment1/images/rose.jpg"
 image = Image.open(image_path).convert("L")  # Ensure it's grayscale
 imageArray = np.array(image)
 
-# Reduce to 7-1 gray levels manually
+# Reduce to 7-1 bits
 reducedImages = quantizer(imageArray)
 #save the images
 for i in range(reducedImages.__len__()):
