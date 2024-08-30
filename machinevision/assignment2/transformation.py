@@ -30,6 +30,27 @@ def logTransformation(image_array, c):
         
     return finalizedImages
 
+def powerLawTransformation(image_array, c, gamma):
+    # Initialize a new array with the same shape as the original image
+    finalizedImages = []
+    reduced_image = np.zeros_like(image_array)
+    # Loop through for 7-1 bits
+        
+    # integer division of the matrix by the quantization step, then multiplying by the quantization step to brighten the image
+    quantized_image_np = np.zeros_like(image_array)
+    for i in range(image.size[0]):
+        for j in range(image.size[1]):
+            quantized_image_np[i][j] = (c * (image_array[i][j])**gamma)
+
+
+    reduced_image = quantized_image_np
+
+    # Convert the array to an image
+    reduced_image = Image.fromarray(reduced_image)
+    finalizedImages.append(reduced_image)
+        
+    return finalizedImages
+
 # #Make a 4x2 image with the original image and the upsampled downsampled images
 # #not required so I used in built functions but it is a nice way to see the difference
 # def fullComparisonOfFinalImages(reducedImages, img):
@@ -66,9 +87,10 @@ image = Image.open(image_path).convert("L")  # Ensure it's grayscale
 imageArray = np.array(image)
 
 # Reduce to 7-1 bits
-reducedImages = logTransformation(imageArray, 10)
+logTransform = logTransformation(imageArray, 50)
+powerLawTransform = powerLawTransformation(imageArray, 50, 0.9)
 #save the images
-for i in range(reducedImages.__len__()):
-    reducedImages[i].save(f"machinevision/assignment2/newthing{2**(7-i)}.jpg")
+logTransform[0].save("machinevision/assignment2/fourierspectrum_logTransformed.jpg")
+powerLawTransform[0].save("machinevision/assignment2/fourierspectrum_powerLawTransformed.jpg")
     # print(2**(7-i))
 # fullComparisonOfFinalImages(reducedImages, image)
