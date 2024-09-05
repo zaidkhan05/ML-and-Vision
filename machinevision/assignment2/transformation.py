@@ -53,10 +53,11 @@ def fullComparisonOfFinalImages(images):
 image_path = "machinevision/assignment2/fourierspectrum.pgm"
 image = Image.open(image_path).convert("L")  # Ensure it's grayscale
 imageArray = np.array(image)
-
+c=50
+gamma=0.8
 #do the transformations
-logTransform = logTransformation(imageArray, 50)
-powerLawTransform = powerLawTransformation(imageArray, 50, 0.8)
+logTransform = logTransformation(imageArray, c)
+powerLawTransform = powerLawTransformation(imageArray, c, gamma)
 images = [image, logTransform, powerLawTransform]
 #save a comparison of the images
 comparisons = fullComparisonOfFinalImages(images)

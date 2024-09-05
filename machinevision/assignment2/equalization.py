@@ -52,9 +52,5 @@ def equalizeImage(image):
 image = cv2.imread('machinevision/assignment1/images/frog.jpg', cv2.IMREAD_GRAYSCALE)
 equalized_image = equalizeImage(image)
 cv2.imwrite('machinevision/assignment2/images/frogequalized.jpg', equalized_image)
-# equalized_image.save('machinevision/assignment2/images/bankerequalized.jpg')
 
-
-# # Load the grayscale image
-# image = cv2.imread('machinevision/assignment2/banker.jpg', cv2.IMREAD_GRAYSCALE)
 
