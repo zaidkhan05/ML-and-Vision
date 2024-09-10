@@ -13,6 +13,7 @@ def kmeans(data, k, normType, max_iters=100):
     centers = data[np.random.choice(data.shape[0], k, replace=False)]
     for _ in range(max_iters):
         distanceMatrix = np.linalg.norm(data[:, None] - centers, axis=2)
+        # print(distanceMatrix)
         clusters = np.argmin(distanceMatrix, axis=1)
         new_centers = np.array([data[clusters == i].mean(axis=0) for i in range(k)])
         if np.all(new_centers == centers):
