@@ -36,9 +36,9 @@ def kmeans(data, k, run, max_iters=100):
     return save_path  # Return the path to the saved image
 
 def unNormalizedKmeans():
-    data = load_kmtest()
+    data = loadIrisData()
     plots = []
-    plots.append('machinelearning/assignment1/results/original_iris_data.png')
+    plots.append('machinelearning/assignment1/results/original_iris_clustered_data.png')
     plots.append(kmeans(data, 3, 1))
     plots.append(kmeans(data, 3, 2))
     plots.append(kmeans(data, 3, 3))
@@ -54,7 +54,26 @@ def unNormalizedKmeans():
     plt.tight_layout()
     plt.savefig('machinelearning/assignment1/results/iris_all_clusters.png')
     plt.show()
+def originalClusters():
+    # Load the dataset
+    data = pd.read_csv('machinelearning/assignment1/given/iris.csv', header=None).values
+    
+    # Map species to numerical values for coloring
+    species = data[:, 4]
+    species_unique = list(set(species))  # Unique species
+    species_colors = {species_unique[i]: i for i in range(len(species_unique))}  # Map species to numbers
 
+    # Assign color based on species
+    colors = [species_colors[s] for s in species]
+    
+    # Create the scatter plot
+    plt.figure()
+    plt.scatter(data[:, 2], data[:, 3], c=colors, cmap='viridis')
+    plt.title('Original Iris Data')
+    
+    # Save and show the plot
+    plt.savefig('machinelearning/assignment1/results/original_iris_clustered_data.png')
+    plt.show()
 
 if __name__ == '__main__':
     data = loadIrisData()
