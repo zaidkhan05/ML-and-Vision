@@ -3,11 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg  # Import this for loading saved images
 
-def load_kmtest():
+def loadIrisData():
     return pd.read_csv('machinelearning/assignment1/given/iris.csv', header=None, usecols=(0,1,2,3)).values
 
-def zscore(data):
-    return (data - data.mean(axis=0)) / data.std(axis=0)
 def kmeans(data, k, run, max_iters=100):
     centers = data[np.random.choice(data.shape[0], k, replace=False)]
     # print(centers)
@@ -56,17 +54,16 @@ def unNormalizedKmeans():
     plt.tight_layout()
     plt.savefig('machinelearning/assignment1/results/iris_all_clusters.png')
     plt.show()
-def originalClusters():
-    data = pd.read_csv('machinelearning/assignment1/given/iris.csv', header=None).values
-    clusters = data[5]
+
 
 if __name__ == '__main__':
-    data = load_kmtest()
+    data = loadIrisData()
     # print(data)
     plt.figure()
     plt.scatter(data[:, 2], data[:, 3])
     plt.title('Original Data')
     plt.savefig('machinelearning/assignment1/results/original_iris_data.png')
     plt.show()
+    originalClusters()
     unNormalizedKmeans()
     # normalizedKmeans()
