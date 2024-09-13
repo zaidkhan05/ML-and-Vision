@@ -67,8 +67,8 @@ training_generator = DataGenerator(data.iloc[:train_idx], subset = "train", batc
 validation_generator = DataGenerator(data.iloc[train_idx:], subset = "train", batch_size=640)
 
 from keras.callbacks import Callback, ModelCheckpoint, ReduceLROnPlateau
-filepath1="meow/weights-improvement-{epoch:02d}-{val_accuracy:.2f}.hdf5"
-filepath2 = "meow/best_weights.hdf5"
+filepath1="meow/weights-improvement-{epoch:02d}-{val_accuracy:.2f}.keras"
+filepath2 = "meow/best_weights.keras"
 checkpoint1 = ModelCheckpoint(filepath1, monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
 checkpoint2 = ModelCheckpoint(filepath2, monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
 
@@ -80,10 +80,10 @@ reduce_lr = ReduceLROnPlateau(
 )
 callbacks_list = [checkpoint1,checkpoint2,reduce_lr]
 
-history = model.fit_generator(training_generator, validation_data = validation_generator, epochs = 5, verbose=1,callbacks=callbacks_list )
+history = model.fit(training_generator, validation_data = validation_generator, epochs = 5, verbose=1,callbacks=callbacks_list )
 
 
-model.load_weights('meow/best_weights.hdf5')
+model.load_weights('meow/best_weights.keras')
 
 def solve_sudoku_with_nn(model, puzzle):
 	# Preprocess the input Sudoku puzzle
