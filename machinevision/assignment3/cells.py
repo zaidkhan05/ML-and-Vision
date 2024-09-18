@@ -5,7 +5,7 @@ from PIL import Image
 
 def circledetector(img):
 
-    cv2.imwrite(f'machinevision/assignment3/results/{whichImage}circles.jpg', img)
+    cv2.imwrite(f'machinevision/assignment3/results/cellcircles.jpg', img)
     return img
 
 
