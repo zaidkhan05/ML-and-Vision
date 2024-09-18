@@ -57,7 +57,7 @@ def unNormalizedKmeans():
 def originalClusters():
     # Load the dataset
     data = pd.read_csv('machinelearning/assignment1/given/iris.csv', header=None).values
-    
+
     # Map species to numerical values for coloring
     species = data[:, 4]
     species_unique = list(set(species))  # Unique species
@@ -70,6 +70,7 @@ def originalClusters():
     plt.figure()
     plt.scatter(data[:, 2], data[:, 3], c=colors, cmap='viridis')
     plt.title('Original Iris Data')
+    plt.legend()
     
     # Save and show the plot
     plt.savefig('machinelearning/assignment1/results/original_iris_clustered_data.png')
@@ -85,4 +86,3 @@ if __name__ == '__main__':
     plt.show()
     originalClusters()
     unNormalizedKmeans()
-    # normalizedKmeans()
