@@ -39,7 +39,7 @@ if detected_circles is not None:
 		# Draw a small circle (of radius 1) to show the center.
 		cv2.circle(img, (a, b), 1, (0, 0, 255), 3)
 
-
+print(detected_circles)
 #smallest radius
 print(f'min: {min(radii)}')
 #largest radius
