@@ -14,6 +14,7 @@ gray = cv2.morphologyEx(gray, cv2.MORPH_DILATE, np.ones((19, 19), np.uint8))
 gray = cv2.blur(gray, (25, 25))
 cv2.imshow('blurred', gray)
 cv2.waitKey(0)
+cv2.imwrite("results/blurredCells.jpg", gray)
 
 # Apply Hough transform on the blurred image.
 detected_circles = cv2.HoughCircles(gray,
@@ -48,6 +49,6 @@ print(f'max: {max(radii)}')
 print(f'total: {len(radii)}')
 cv2.imshow('Detected Circles', img)
 cv2.waitKey(0)
-cv2.imwrite("cellcircled.jpg", img)
+cv2.imwrite("results/cellcircled.jpg", img)
 
 
