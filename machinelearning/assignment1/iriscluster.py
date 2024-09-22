@@ -4,15 +4,29 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg  # Import this for loading saved images
 
 def loadIrisData():
-    return pd.read_csv('machinelearning/assignment1/given/iris.csv', header=None, usecols=(0,1,2,3)).values
+    return pd.read_csv('C:/Users/agent/PycharmProjects/ML-and-Vision/machinelearning/assignment1/given/iris.csv', header=None, usecols=(0,1,2,3)).values
 
 def kmeans(data, k, run, max_iters=100):
     centers = data[np.random.choice(data.shape[0], k, replace=False)]
     # print(centers)
     print(np.random.choice(data.shape[0]))
+    x = True
     for _ in range(max_iters):
         distanceMatrix = np.linalg.norm(data[:, None] - centers, axis=2)
         clusters = np.argmin(distanceMatrix, axis=1)
+        if x:
+            plt.figure()
+            for q in range(k):
+                plt.scatter(data[clusters == q, 2], data[clusters == q, 3], label=f'Cluster {q + 1}')
+            plt.scatter(centers[:, 2], centers[:, 3], color='black', marker='x', label='Centers')
+            plt.title(f' Original iris Clustering with 3 clusters. Run {run}')
+            plt.legend()
+
+            # Save the figure
+            save_path = f'C:/Users/agent/PycharmProjects/ML-and-Vision/machinelearning/assignment1/results/og_iris_clusters{run}.png'
+            plt.savefig(save_path)
+            plt.close()
+            x = False
         new_centers = np.array([data[clusters == i].mean(axis=0) for i in range(k)])
         # print(new_centers)
         if np.all(new_centers == centers):
@@ -29,7 +43,7 @@ def kmeans(data, k, run, max_iters=100):
     plt.legend()
 
     # Save the figure
-    save_path = f'machinelearning/assignment1/results/iris_clusters{run}.png'
+    save_path = f'C:/Users/agent/PycharmProjects/ML-and-Vision/machinelearning/assignment1/results/iris_clusters{run}.png'
     plt.savefig(save_path)
     plt.close()
 
@@ -38,7 +52,7 @@ def kmeans(data, k, run, max_iters=100):
 def unNormalizedKmeans():
     data = loadIrisData()
     plots = []
-    plots.append('machinelearning/assignment1/results/original_iris_clustered_data.png')
+    plots.append('C:/Users/agent/PycharmProjects/ML-and-Vision/machinelearning/assignment1/results/original_iris_clustered_data.png')
     plots.append(kmeans(data, 3, 1))
     plots.append(kmeans(data, 3, 2))
     plots.append(kmeans(data, 3, 3))
@@ -52,12 +66,12 @@ def unNormalizedKmeans():
         plt.axis('off')  # Hide axes for better visualization
         # plt.title(f'K-Means Clustering ({i+2} clusters)')
     plt.tight_layout()
-    plt.savefig('machinelearning/assignment1/results/iris_all_clusters.png')
+    plt.savefig('C:/Users/agent/PycharmProjects/ML-and-Vision/machinelearning/assignment1/results/iris_all_clusters.png')
     plt.show()
 def originalClusters():
     # Load the dataset
-    data = pd.read_csv('machinelearning/assignment1/given/iris.csv', header=None).values
-    
+    data = pd.read_csv('C:/Users/agent/PycharmProjects/ML-and-Vision/machinelearning/assignment1/given/iris.csv', header=None).values
+
     # Map species to numerical values for coloring
     species = data[:, 4]
     species_unique = list(set(species))  # Unique species
@@ -70,9 +84,10 @@ def originalClusters():
     plt.figure()
     plt.scatter(data[:, 2], data[:, 3], c=colors, cmap='viridis')
     plt.title('Original Iris Data')
+    plt.legend()
     
     # Save and show the plot
-    plt.savefig('machinelearning/assignment1/results/original_iris_clustered_data.png')
+    plt.savefig('C:/Users/agent/PycharmProjects/ML-and-Vision/machinelearning/assignment1/results/original_iris_clustered_data.png')
     plt.show()
 
 if __name__ == '__main__':
@@ -81,8 +96,7 @@ if __name__ == '__main__':
     plt.figure()
     plt.scatter(data[:, 2], data[:, 3])
     plt.title('Original Data')
-    plt.savefig('machinelearning/assignment1/results/original_iris_data.png')
+    plt.savefig('C:/Users/agent/PycharmProjects/ML-and-Vision/machinelearning/assignment1/results/original_iris_data.png')
     plt.show()
     originalClusters()
     unNormalizedKmeans()
-    # normalizedKmeans()
