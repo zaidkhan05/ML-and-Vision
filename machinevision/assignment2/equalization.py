@@ -38,7 +38,7 @@ def equalizeImage(image):
     plt.title('Equalized Image Histogram')
 
     plt.tight_layout()
-    plt.savefig('machinevision/assignment2/comparisons/frogequalization.png')
+    plt.savefig('machinevision/assignment2/comparisons/roseequalization.png')
     plt.show()
 
     # Display the mean and standard deviation
@@ -49,8 +49,8 @@ def equalizeImage(image):
 
 
 
-image = cv2.imread('machinevision/assignment1/images/frog.jpg', cv2.IMREAD_GRAYSCALE)
+image = cv2.imread('machinevision/assignment1/images/rose.jpg', cv2.IMREAD_GRAYSCALE)
 equalized_image = equalizeImage(image)
-cv2.imwrite('machinevision/assignment2/images/frogequalized.jpg', equalized_image)
+cv2.imwrite('machinevision/assignment2/images/roseequalized.jpg', equalized_image)
 
 

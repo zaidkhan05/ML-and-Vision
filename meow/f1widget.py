@@ -7,10 +7,10 @@ print(events)
 events.to_csv('futureEvents.csv', index=False)
 
 #load track data for next race
-x= events["OfficialEventName"]
-event = x.iloc[0]
+x= events["OfficialEventName"].iloc[0]
+# event = x.iloc[0]
 
-track = fastf1.get_event(2024, event)
+track = fastf1.get_event(2024, x)
 print(track)
 
 #load track data for next race
