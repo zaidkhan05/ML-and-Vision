@@ -88,18 +88,36 @@ test_features = normalize(test_features)
 #classify the points
 
 predicted_labels = np.zeros(len(test_features))
+k = [1, 3, 5, 7, 9]
+predictions = [predicted_labels] *5
+for i in range(len(k)):
+    print(k[i])
+    for j in range(len(test_features)):
+        predictions[i][j] = KNN(train_features, train_labels, test_features[j], k[i])
+# for i in range(len(predictions)): #why this no work properly
+    TP, TN, FP, FN = confusionMatrix(test_labels, predictions[i])
+    print('k =', k[i])
+    print(TP, TN, FP, FN)
+    print('Accuracy:', (TP + TN) / (TP + TN + FP + FN))
+    print('Precision:', TP / (TP + FP))
+    print('Recall:', TP / (TP + FN))
+    print('F1 Score:', 2 * TP / (2 * TP + FP + FN))
 
-for i in range(len(test_features)):
-    predicted_labels[i] = KNN(train_features, train_labels, test_features[i], 5)
-print(predicted_labels)
+# for i in range(len(test_features)):
+#     predicted_labels[i] = KNN(train_features, train_labels, test_features[i], 1)
+# print(predicted_labels)
 
-TP, TN, FP, FN = confusionMatrix(test_labels, predicted_labels)
 
-print(TP, TN, FP, FN)
-print('Accuracy:', (TP + TN) / (TP + TN + FP + FN))
-print('Precision:', TP / (TP + FP))
-print('Recall:', TP / (TP + FN))
-print('F1 Score:', 2 * TP / (2 * TP + FP + FN))
+
+
+# TP, TN, FP, FN = confusionMatrix(test_labels, predicted_labels)
+
+# print(TP, TN, FP, FN)
+# print('Accuracy:', (TP + TN) / (TP + TN + FP + FN))
+# print('Precision:', TP / (TP + FP))
+# print('Recall:', TP / (TP + FN))
+# print('F1 Score:', 2 * TP / (2 * TP + FP + FN))
+# print(predictions)
 
 
 
