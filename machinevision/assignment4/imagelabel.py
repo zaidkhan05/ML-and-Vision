@@ -4,9 +4,9 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-
-trainDir = 'machinevision/assignment4/images/Train/'
-testDir = 'machinevision/assignment4/images/Test/'
+fullDir = 'D:/ML-and-Vision/'
+trainDir = fullDir+'machinevision/assignment4/images/Train/'
+testDir = fullDir+'machinevision/assignment4/images/Test/'
 
 
 
@@ -48,22 +48,12 @@ def loadDiabeticRetinopathyImages():
 trainingNames = getImageName(trainDir)
 labeledNamesForTraining = loadDiabeticRetinopathyLabels(trainingNames)
 #save the labeled names to a csv file
-labeledNamesForTraining.to_csv('machinevision/assignment4/labeledNamesForTraining.csv', index=False)
+labeledNamesForTraining.to_csv(fullDir+'machinevision/assignment4/labeledNamesForTraining.csv', index=False)
 print(labeledNamesForTraining.head())
 
 testingNames = getImageName(testDir)
 labeledNamesForTesting = loadDiabeticRetinopathyLabels(testingNames)
 #save the labeled names to a csv file
-labeledNamesForTesting.to_csv('machinevision/assignment4/labeledNamesForTesting.csv', index=False)
+labeledNamesForTesting.to_csv(fullDir+'machinevision/assignment4/labeledNamesForTesting.csv', index=False)
 print(labeledNamesForTesting.head())
-
-
-
-
-
-#0    IDRiD_001_-3.jpg
-# 1    IDRiD_002_-3.jpg
-# 2    IDRiD_003_-2.jpg
-# 3    IDRiD_004_-3.jpg
-# 4    IDRiD_005_-4.jpg
 
