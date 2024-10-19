@@ -19,15 +19,19 @@ def getImageName(dir):
 
 def loadDiabeticRetinopathyLabels(names):
     labels = []
-    for name in names:
-        if '-0' in name:
+    for i in range(len(names)):
+        if '-0.jpg' in names[i]:
             labels.append('NonDR')
-        elif '-3' or '-4' in name:
+        elif '-3.jpg' in names[i] or '-4.jpg' in names[i]:
             labels.append('DR')
-
         else:
-            labels.append('Unknown')
-    return pd.Series(labels, name='labels')
+            labels.append('unknown')
+        
+        # print(names[i], labels[i])
+    labeledNames = pd.DataFrame({'imageNames': names, 'labels': labels})
+    #get rid of unknowns
+    labeledNames = labeledNames[labeledNames['labels'] != 'unknown']
+    return labeledNames
 
 
 def loadDiabeticRetinopathyImages():
@@ -41,11 +45,18 @@ def loadDiabeticRetinopathyImages():
         test_images.append(img)
     return np.array(train_images), np.array(test_images)
 
-names = getImageName(trainDir)
-labels = loadDiabeticRetinopathyLabels(names)
+trainingNames = getImageName(trainDir)
+labeledNamesForTraining = loadDiabeticRetinopathyLabels(trainingNames)
+#save the labeled names to a csv file
+labeledNamesForTraining.to_csv('machinevision/assignment4/labeledNamesForTraining.csv', index=False)
+print(labeledNamesForTraining.head())
 
-print(names.head())
-print(labels.head())
+testingNames = getImageName(testDir)
+labeledNamesForTesting = loadDiabeticRetinopathyLabels(testingNames)
+#save the labeled names to a csv file
+labeledNamesForTesting.to_csv('machinevision/assignment4/labeledNamesForTesting.csv', index=False)
+print(labeledNamesForTesting.head())
+
 
 
 
