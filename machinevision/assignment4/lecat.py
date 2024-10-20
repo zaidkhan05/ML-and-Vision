@@ -89,7 +89,7 @@ criterion = nn.BCEWithLogitsLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 # 4. Train the Model
-def train_model(model, criterion, optimizer, dataloader, num_epochs=10):
+def train_model(model, criterion, optimizer, dataloader, num_epochs):
     model.train()
 
     for epoch in range(num_epochs):
@@ -117,7 +117,7 @@ def train_model(model, criterion, optimizer, dataloader, num_epochs=10):
         print(f"Epoch {epoch+1}/{num_epochs}, Loss: {epoch_loss:.4f}, Accuracy: {epoch_acc:.4f}")
 
 # Train the model
-train_model(model, criterion, optimizer, train_loader, num_epochs=10)
+train_model(model, criterion, optimizer, train_loader, num_epochs=8)
 
 # 5. Evaluate and Save Predictions to CSV, and Generate ROC and Confusion Matrix
 def evaluate_and_plot_roc(model, dataloader, output_csv_path, image_filenames):
@@ -138,7 +138,7 @@ def evaluate_and_plot_roc(model, dataloader, output_csv_path, image_filenames):
             probs = torch.sigmoid(outputs).cpu().numpy()
             preds = (probs > 0.5).astype(int)
 
-            all_labels.extend(labels.cpu().numpy())
+            all_labels.extend(labels.detach().cpu().numpy())
             all_probs.extend(probs)
             predicted_labels.extend(preds.flatten())
             filenames.extend(image_filenames[i * dataloader.batch_size: (i + 1) * dataloader.batch_size])
@@ -146,8 +146,14 @@ def evaluate_and_plot_roc(model, dataloader, output_csv_path, image_filenames):
     # Convert lists to numpy arrays for comparison and accuracy calculation
     predicted_labels = np.array(predicted_labels)
     all_labels = np.array(all_labels)
-    accuracy = (predicted_labels == all_labels).mean()
-    print(f'Test Accuracy: {accuracy:.4f}')
+    labelComparison = np.column_stack((all_labels, predicted_labels))
+    print(labelComparison)
+    for i in range(len(labelComparison)):
+        if labelComparison[i][0] == labelComparison[i][1]:
+            correct += 1
+        total += 1
+    testaccuracy = correct / total
+    print(f'Test Accuracy: {testaccuracy:.4f}')
 
     # Save Predictions to CSV
     results_df = pd.DataFrame({
@@ -179,6 +185,21 @@ def evaluate_and_plot_roc(model, dataloader, output_csv_path, image_filenames):
     plt.title('Confusion Matrix')
     plt.savefig(fullDir + 'machinevision/assignment4/confusion_matrix.png')
     plt.show()
+    print(cm)
+    # Calculate Metrics
+    TP = cm[1, 1]
+    TN = cm[0, 0]
+    FP = cm[0, 1]
+    FN = cm[1, 0]
+    accuracy = (TP + TN) / (TP + TN + FP + FN)
+    precision = TP / (TP + FP)
+    recall = TP / (TP + FN)
+    f1_score = 2 * (precision * recall) / (precision + recall)
+    print(f'TP: {TP}, TN: {TN}, FP: {FP}, FN: {FN}')
+    print(f'Accuracy: {accuracy:.4f}')
+    print(f'Precision: {precision:.4f}')
+    print(f'Recall: {recall:.4f}')
+    print(f'F1 Score: {f1_score:.4f}')
 
 
 # Evaluate and plot
