@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -7,6 +8,8 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image
 import os
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc, confusion_matrix, ConfusionMatrixDisplay
 
 # Directories
 fullDir = 'D:/ML-and-Vision/'
@@ -116,12 +119,14 @@ def train_model(model, criterion, optimizer, dataloader, num_epochs=10):
 # Train the model
 train_model(model, criterion, optimizer, train_loader, num_epochs=10)
 
-# 5. Evaluate and Save Predictions to CSV
-def evaluate_model_and_save_predictions(model, dataloader, output_csv_path, image_filenames):
+# 5. Evaluate and Save Predictions to CSV, and Generate ROC and Confusion Matrix
+def evaluate_and_plot_roc(model, dataloader, output_csv_path, image_filenames):
     model.eval()
 
     correct = 0
     total = 0
+    all_labels = []
+    all_probs = []
     predicted_labels = []
     filenames = []
 
@@ -130,17 +135,21 @@ def evaluate_model_and_save_predictions(model, dataloader, output_csv_path, imag
             inputs, labels = inputs.to(device), labels.to(device).float().unsqueeze(1)
             outputs = model(inputs)
 
-            preds = torch.sigmoid(outputs) > 0.5
-            correct += (preds == labels).sum().item()
-            total += labels.size(0)
+            probs = torch.sigmoid(outputs).cpu().numpy()
+            preds = (probs > 0.5).astype(int)
 
-            predicted_labels.extend(preds.cpu().numpy().astype(int).flatten())
+            all_labels.extend(labels.cpu().numpy())
+            all_probs.extend(probs)
+            predicted_labels.extend(preds.flatten())
             filenames.extend(image_filenames[i * dataloader.batch_size: (i + 1) * dataloader.batch_size])
 
-    accuracy = correct / total
+    # Convert lists to numpy arrays for comparison and accuracy calculation
+    predicted_labels = np.array(predicted_labels)
+    all_labels = np.array(all_labels)
+    accuracy = (predicted_labels == all_labels).mean()
     print(f'Test Accuracy: {accuracy:.4f}')
 
-    # Save to CSV
+    # Save Predictions to CSV
     results_df = pd.DataFrame({
         'imageNames': filenames,
         'predictedLabels': ['DR' if label == 1 else 'NonDR' for label in predicted_labels]
@@ -148,12 +157,30 @@ def evaluate_model_and_save_predictions(model, dataloader, output_csv_path, imag
     results_df.to_csv(output_csv_path, index=False)
     print(f"Predictions saved to {output_csv_path}")
 
-# Evaluate the model and save predictions
-output_csv_path = fullDir + 'machinevision/assignment4/predicted_labels.csv'
+    # Plot ROC Curve
+    fpr, tpr, _ = roc_curve(all_labels, all_probs)
+    roc_auc = auc(fpr, tpr)
+    plt.figure()
+    plt.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+    plt.plot([0, 1], [0, 1], color='gray', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.legend(loc="lower right")
+    plt.savefig(fullDir + 'machinevision/assignment4/roc_curve.png')
+    plt.show()
 
-evaluate_model_and_save_predictions(
-    model,
-    test_loader,
-    output_csv_path,
-    labeledNamesForTesting['imageNames'].values
-)
+    # Confusion Matrix
+    cm = confusion_matrix(all_labels, predicted_labels)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['NonDR', 'DR'])
+    disp.plot(cmap=plt.cm.Blues)
+    plt.title('Confusion Matrix')
+    plt.savefig(fullDir + 'machinevision/assignment4/confusion_matrix.png')
+    plt.show()
+
+
+# Evaluate and plot
+output_csv_path = fullDir + 'machinevision/assignment4/predicted_labels.csv'
+evaluate_and_plot_roc(model, test_loader, output_csv_path, labeledNamesForTesting['imageNames'].values)
