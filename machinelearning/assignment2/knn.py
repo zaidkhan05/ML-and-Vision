@@ -78,6 +78,9 @@ def confusionMatrix(test_labels, predicted_labels):
 
 train, test = splitData(x)
 print(train.shape, test.shape)
+x = train.shape[0]
+y = test.shape[0]
+print('percent of data used for testing:',f'{x/(x+y)*100:.0f}')
 
 train_features, train_labels = splitFeaturesAndLabels(train)
 train_features = normalize(train_features)
@@ -102,10 +105,9 @@ Precision = []
 Recall = []
 F1_Score = []
 for i in range(len(predictions)):
-    print("")
+    # print("")
     prediction = np.array(predictions[i])
     truePositive, trueNegative, falsePositive, falseNegative = confusionMatrix(test_labels, prediction)
-    print('k =', f'{i*2+1}')
     TN.append(trueNegative)
     FP.append(falsePositive)
     FN.append(falseNegative)
@@ -118,11 +120,12 @@ for i in range(len(predictions)):
     Precision.append(precision)
     Recall.append(recall)
     F1_Score.append(f1_score)
-    print(TP[i], TN[i], FP[i], FN[i])
-    print('Accuracy:', accuracy)
-    print('Precision:', precision)
-    print('Recall:', recall)
-    print('F1 Score:', f1_score)
+    # print('k =', f'{i*2+1}')
+    # print(TP[i], TN[i], FP[i], FN[i])
+    # print('Accuracy:', accuracy)
+    # print('Precision:', precision)
+    # print('Recall:', recall)
+    # print('F1 Score:', f1_score)
 
 
 # print(predictions)

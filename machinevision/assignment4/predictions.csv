@@ -1,9 +1,9 @@
 imageNames,predictedLabels
 IDRiD_001_-4.jpg,NonDR
 IDRiD_002_-4.jpg,NonDR
-IDRiD_003_-4.jpg,NonDR
+IDRiD_003_-4.jpg,DR
 IDRiD_004_-4.jpg,NonDR
-IDRiD_005_-4.jpg,DR
+IDRiD_005_-4.jpg,NonDR
 IDRiD_006_-3.jpg,DR
 IDRiD_007_-3.jpg,DR
 IDRiD_013_-3.jpg,DR
@@ -32,7 +32,7 @@ IDRiD_043_-0.jpg,NonDR
 IDRiD_044_-0.jpg,NonDR
 IDRiD_045_-0.jpg,NonDR
 IDRiD_047_-0.jpg,NonDR
-IDRiD_048_-4.jpg,NonDR
+IDRiD_048_-4.jpg,DR
 IDRiD_050_-0.jpg,NonDR
 IDRiD_052_-0.jpg,NonDR
 IDRiD_053_-4.jpg,DR
