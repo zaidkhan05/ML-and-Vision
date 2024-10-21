@@ -1,9 +1,9 @@
 imageNames,predictedLabels
 IDRiD_001_-4.jpg,NonDR
 IDRiD_002_-4.jpg,NonDR
-IDRiD_003_-4.jpg,DR
-IDRiD_004_-4.jpg,DR
-IDRiD_005_-4.jpg,NonDR
+IDRiD_003_-4.jpg,NonDR
+IDRiD_004_-4.jpg,NonDR
+IDRiD_005_-4.jpg,DR
 IDRiD_006_-3.jpg,DR
 IDRiD_007_-3.jpg,DR
 IDRiD_013_-3.jpg,DR
@@ -32,7 +32,7 @@ IDRiD_043_-0.jpg,NonDR
 IDRiD_044_-0.jpg,NonDR
 IDRiD_045_-0.jpg,NonDR
 IDRiD_047_-0.jpg,NonDR
-IDRiD_048_-4.jpg,DR
+IDRiD_048_-4.jpg,NonDR
 IDRiD_050_-0.jpg,NonDR
 IDRiD_052_-0.jpg,NonDR
 IDRiD_053_-4.jpg,DR
@@ -42,11 +42,11 @@ IDRiD_056_-0.jpg,NonDR
 IDRiD_057_-4.jpg,DR
 IDRiD_058_-0.jpg,NonDR
 IDRiD_060_-3.jpg,NonDR
-IDRiD_061_-4.jpg,DR
+IDRiD_061_-4.jpg,NonDR
 IDRiD_062_-4.jpg,DR
 IDRiD_064_-3.jpg,NonDR
 IDRiD_066_-3.jpg,DR
-IDRiD_068_-0.jpg,DR
+IDRiD_068_-0.jpg,NonDR
 IDRiD_069_-0.jpg,NonDR
 IDRiD_070_-0.jpg,NonDR
 IDRiD_071_-0.jpg,NonDR
