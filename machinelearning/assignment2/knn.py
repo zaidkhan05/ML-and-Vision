@@ -13,7 +13,6 @@ def loadBreastCancerData():
 
 
 x = loadBreastCancerData()
-print(x.shape)
 
 # Split the data into training and test sets
 def splitData(x):
@@ -29,21 +28,16 @@ def normalize(data):
     return (data - data.mean(axis=0)) / data.std(axis=0)
 
 def KNN(train_features, train_labels, test_features, k):
-    # print(train_features.shape, train_labels.shape)
-    # print(test_features.shape)
+
     distances = np.zeros(len(train_features))
     for i in range(len(train_features)):
         distances[i] = np.linalg.norm(train_features[i] - test_features)
-    # print(distances)
     #sort the distances
     sorted_indices = np.argsort(distances)
-    # print(sorted_indices)
     #get the k nearest neighbors
     nearest_neighbors = sorted_indices[:k]
-    # print(nearest_neighbors)
     #get the labels of the k nearest neighbors
     nearest_labels = train_labels[nearest_neighbors]
-    # print(nearest_labels)
     #count the number of malignant and benign labels
     malignant_count = 0
     benign_count = 0
@@ -59,7 +53,6 @@ def KNN(train_features, train_labels, test_features, k):
 
 def testKNN(train_features, train_labels, test_features, test_labels, k):
     predicted_labels = np.zeros(len(test_features))
-    # print(k)
     for i in range(len(test_features)):
         predicted_labels[i] = KNN(train_features, train_labels, test_features[i], k)
     predictions = pd.DataFrame(predicted_labels)
@@ -77,7 +70,6 @@ def confusionMatrix(test_labels, predicted_labels):
 
 
 train, test = splitData(x)
-print(train.shape, test.shape)
 x = train.shape[0]
 y = test.shape[0]
 print('percent of data used for testing:',f'{x/(x+y)*100:.0f}')
@@ -105,7 +97,6 @@ Precision = []
 Recall = []
 F1_Score = []
 for i in range(len(predictions)):
-    # print("")
     prediction = np.array(predictions[i])
     truePositive, trueNegative, falsePositive, falseNegative = confusionMatrix(test_labels, prediction)
     TN.append(trueNegative)
@@ -120,15 +111,7 @@ for i in range(len(predictions)):
     Precision.append(precision)
     Recall.append(recall)
     F1_Score.append(f1_score)
-    # print('k =', f'{i*2+1}')
-    # print(TP[i], TN[i], FP[i], FN[i])
-    # print('Accuracy:', accuracy)
-    # print('Precision:', precision)
-    # print('Recall:', recall)
-    # print('F1 Score:', f1_score)
 
-
-# print(predictions)
 df = pd.DataFrame(df)
 df['TP'] = TP
 df['TN'] = TN
