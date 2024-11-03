@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc, confusion_matrix, ConfusionMatrixDisplay
 
 # Directories
-fullDir = 'D:/ML-and-Vision/'
+fullDir = ''
 #directories for training and testing images
 trainDir = fullDir + 'machinevision/assignment4/images/Train/'
 testDir = fullDir + 'machinevision/assignment4/images/Test/'
@@ -125,7 +125,7 @@ def train_model(model, criterion, optimizer, dataloader, num_epochs, accumulatio
         print(f"Epoch {epoch+1}/{num_epochs}, Loss: {epoch_loss:.4f}, Accuracy: {epoch_acc:.4f}")
 
 # Train the model for 10 epochs
-train_model(model, criterion, optimizer, train_loader, num_epochs=10)
+train_model(model, criterion, optimizer, train_loader, num_epochs=4)
 
 # Calculate and print confusion matrix and metrics
 def calculate_confusion_matrix(cm):

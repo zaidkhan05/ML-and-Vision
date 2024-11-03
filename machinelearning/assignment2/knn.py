@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 malignant = 1
 benign = -1
@@ -10,9 +11,8 @@ def loadBreastCancerData():
     return pd.read_csv('machinelearning/assignment2/given/wdbc.data.mb.csv', header=None).values
     # return pd.read_csv('machinelearning/assignment2/given/test.csv', header=None).values
 
-
+    
 x = loadBreastCancerData()
-print(x.shape)
 
 # Split the data into training and test sets
 def splitData(x):
@@ -28,21 +28,16 @@ def normalize(data):
     return (data - data.mean(axis=0)) / data.std(axis=0)
 
 def KNN(train_features, train_labels, test_features, k):
-    # print(train_features.shape, train_labels.shape)
-    # print(test_features.shape)
+
     distances = np.zeros(len(train_features))
     for i in range(len(train_features)):
         distances[i] = np.linalg.norm(train_features[i] - test_features)
-    # print(distances)
     #sort the distances
     sorted_indices = np.argsort(distances)
-    # print(sorted_indices)
     #get the k nearest neighbors
     nearest_neighbors = sorted_indices[:k]
-    # print(nearest_neighbors)
     #get the labels of the k nearest neighbors
     nearest_labels = train_labels[nearest_neighbors]
-    # print(nearest_labels)
     #count the number of malignant and benign labels
     malignant_count = 0
     benign_count = 0
@@ -58,42 +53,26 @@ def KNN(train_features, train_labels, test_features, k):
 
 def testKNN(train_features, train_labels, test_features, test_labels, k):
     predicted_labels = np.zeros(len(test_features))
-    print(k)
     for i in range(len(test_features)):
         predicted_labels[i] = KNN(train_features, train_labels, test_features[i], k)
-    # for i in range(len(predictions)): #why this no work properly
-    TP, TN, FP, FN = confusionMatrix(test_labels, predicted_labels)
-    print('k =', k)
-    print(TP, TN, FP, FN)
-    print('Accuracy:', (TP + TN) / (TP + TN + FP + FN))
-    print('Precision:', TP / (TP + FP))
-    print('Recall:', TP / (TP + FN))
-    print('F1 Score:', 2 * TP / (2 * TP + FP + FN))
     predictions = pd.DataFrame(predicted_labels)
     return predictions
 
 def confusionMatrix(test_labels, predicted_labels):
-    TP = 0
-    TN = 0
-    FP = 0
-    FN = 0
-    for i in range(len(test_labels)):
-        if test_labels[i] == malignant and predicted_labels[i] == malignant:
-            TP += 1
-        elif test_labels[i] == benign and predicted_labels[i] == benign:
-            TN += 1
-        elif test_labels[i] == benign and predicted_labels[i] == malignant:
-            FP += 1
-        else:
-            FN += 1
-    return TP, TN, FP, FN
-
-
-# row = x[0]
+    truePos = 0
+    trueNeg = 0
+    falsePos = 0
+    falseNeg = 0
+    cm = confusion_matrix(test_labels, predicted_labels)
+    truePos, trueNeg = cm[1, 1], cm[0, 0]
+    falsePos, falseNeg = cm[0, 1], cm[1, 0]
+    return truePos, trueNeg, falsePos, falseNeg
 
 
 train, test = splitData(x)
-print(train.shape, test.shape)
+x = train.shape[0]
+y = test.shape[0]
+print('percent of data used for testing:',f'{x/(x+y)*100:.0f}')
 
 train_features, train_labels = splitFeaturesAndLabels(train)
 train_features = normalize(train_features)
@@ -104,62 +83,42 @@ test_features = normalize(test_features)
 
 # predicted_labels = np.zeros(len(test_features))
 k = [1, 3, 5, 7, 9]
-# predictions = [predicted_labels] *5
-# for i in range(len(k)):
-#     print(k[i])
-#     for j in range(len(test_features)):
-#         predictions[i][j] = KNN(train_features, train_labels, test_features[j], k[i])
-# # for i in range(len(predictions)): #why this no work properly
-#     TP, TN, FP, FN = confusionMatrix(test_labels, predictions[i])
-#     print('k =', k[i])
-#     print(TP, TN, FP, FN)
-#     print('Accuracy:', (TP + TN) / (TP + TN + FP + FN))
-#     print('Precision:', TP / (TP + FP))
-#     print('Recall:', TP / (TP + FN))
-#     print('F1 Score:', 2 * TP / (2 * TP + FP + FN))
-# predictions = pd.DataFrame(predictions)
 predictions = []
+df = pd.DataFrame()
 for i in range(len(k)):
     predictions.append(testKNN(train_features, train_labels, test_features, test_labels, k[i]))
-    #newline
-    print('')
+df = {'kValue': k}
+TN = []
+FP = []
+FN = []
+TP = []
+Accuracy = []
+Precision = []
+Recall = []
+F1_Score = []
 for i in range(len(predictions)):
-    print("")
     prediction = np.array(predictions[i])
-    TP, TN, FP, FN = confusionMatrix(test_labels, prediction)
-    print('k =', f'predictions[{i*2+1}]')
-    print(TP, TN, FP, FN)
-    print('Accuracy:', (TP + TN) / (TP + TN + FP + FN))
-    print('Precision:', TP / (TP + FP))
-    print('Recall:', TP / (TP + FN))
-    print('F1 Score:', 2 * TP / (2 * TP + FP + FN))
-    
-# print(predictions)
-# predictions = pd.DataFrame(predictions)
-print(predictions)
+    truePositive, trueNegative, falsePositive, falseNegative = confusionMatrix(test_labels, prediction)
+    TN.append(trueNegative)
+    FP.append(falsePositive)
+    FN.append(falseNegative)
+    TP.append(truePositive)
+    accuracy = (TP[i] + TN[i]) / (TP[i] + TN[i] + FP[i] + FN[i])
+    precision = TP[i] / (TP[i] + FP[i])
+    recall = TP[i] / (TP[i] + FN[i])
+    f1_score = 2 * TP[i] / (2 * TP[i] + FP[i] + FN[i])
+    Accuracy.append(accuracy)
+    Precision.append(precision)
+    Recall.append(recall)
+    F1_Score.append(f1_score)
 
-
-
-# for i in range(len(test_features)):
-#     predicted_labels[i] = KNN(train_features, train_labels, test_features[i], 1)
-# print(predicted_labels)
-
-
-
-
-# TP, TN, FP, FN = confusionMatrix(test_labels, predicted_labels)
-
-# print(TP, TN, FP, FN)
-# print('Accuracy:', (TP + TN) / (TP + TN + FP + FN))
-# print('Precision:', TP / (TP + FP))
-# print('Recall:', TP / (TP + FN))
-# print('F1 Score:', 2 * TP / (2 * TP + FP + FN))
-# print(predictions)
-
-
-
-# print(train_features.shape, train_labels.shape)
-# print(train_labels[0])
-# print(train_features[0])#row549
-# print(train[0])
-# print(x[0])
+df = pd.DataFrame(df)
+df['TP'] = TP
+df['TN'] = TN
+df['FP'] = FP
+df['FN'] = FN
+df['Accuracy'] = Accuracy
+df['Precision'] = Precision
+df['Recall'] = Recall
+df['F1_Score'] = F1_Score
+print(df)
