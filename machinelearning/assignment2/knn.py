@@ -71,7 +71,7 @@ def confusionMatrix(test_labels, predicted_labels):
     falsePos, falseNeg = cm[0, 1], cm[1, 0]
     return truePos, trueNeg, falsePos, falseNeg
 
-# x = mixrows(x)
+x = mixrows(x)
 # train, test = splitData(x)
 # x = train.shape[0]
 # y = test.shape[0]
