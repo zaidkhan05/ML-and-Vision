@@ -14,6 +14,9 @@ def loadBreastCancerData():
     
 x = loadBreastCancerData()
 
+def mixrows(x):
+    np.random.shuffle(x)
+    return x
 # Split the data into training and test sets
 def splitData(x):
     split = int(0.7 * len(x))
@@ -68,16 +71,23 @@ def confusionMatrix(test_labels, predicted_labels):
     falsePos, falseNeg = cm[0, 1], cm[1, 0]
     return truePos, trueNeg, falsePos, falseNeg
 
+# x = mixrows(x)
+# train, test = splitData(x)
+# x = train.shape[0]
+# y = test.shape[0]
+# print('percent of data used for testing:',f'{x/(x+y)*100:.0f}')
+# train_features, train_labels = splitFeaturesAndLabels(train)
+# train_features = normalize(train_features)
+# test_features, test_labels = splitFeaturesAndLabels(test)
+# test_features = normalize(test_features)
 
-train, test = splitData(x)
-x = train.shape[0]
-y = test.shape[0]
-print('percent of data used for testing:',f'{x/(x+y)*100:.0f}')
-
-train_features, train_labels = splitFeaturesAndLabels(train)
-train_features = normalize(train_features)
-test_features, test_labels = splitFeaturesAndLabels(test)
-test_features = normalize(test_features)
+features, labels = splitFeaturesAndLabels(x)
+features = normalize(features)
+train_features, test_features = splitData(features)
+trainSize = train_features.shape[0]
+testSize = test_features.shape[0]
+train_labels, test_labels = splitData(labels)
+print('percent of data used for testing:',f'{trainSize/(trainSize+testSize)*100:.0f}')
 
 #classify the points
 
