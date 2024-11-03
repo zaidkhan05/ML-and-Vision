@@ -11,7 +11,7 @@ def loadBreastCancerData():
     return pd.read_csv('machinelearning/assignment2/given/wdbc.data.mb.csv', header=None).values
     # return pd.read_csv('machinelearning/assignment2/given/test.csv', header=None).values
 
-
+    
 x = loadBreastCancerData()
 
 # Split the data into training and test sets
