@@ -12,13 +12,13 @@ import pandas as pd
 import time
 
 # Parameters
-path = ''
+path = 'D:/ML-and-Vision/'
 datasetDirectory = path + 'machinevision/project/dataset/'
 definedLabels = path + 'machinevision/project/labels.csv'
 
 # Hyperparameters
-batch_size = 32
-numEpochs = 10
+batch_size = 1028
+numEpochs = 50
 learningRate = 0.001
 
 # Image transformations for training and testing data
@@ -111,8 +111,8 @@ def testModel(model, testLoader):
 if __name__ == "__main__":
     startTime = time.time()
     # Device configuration
-    device = torch.device("cpu")
-    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
     # Load the training dataset
