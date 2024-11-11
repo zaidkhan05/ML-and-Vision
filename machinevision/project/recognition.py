@@ -8,7 +8,7 @@ import pandas as pd
 
 # Set paths and model configuration
 path = 'D:/ML-and-Vision/'
-modelDirectory = path + 'machinevision/project/model.pth'
+modelDirectory = path + 'machinevision/project/model50_25.pth'
 videoPath = path + 'machinevision/project/dataset/inputvideo.mp4'  # Path to your input video
 
 frameWidth = 640
@@ -16,7 +16,7 @@ frameHeight = 480
 brightness = 180
 threshold = 0.40
 font = cv2.FONT_HERSHEY_SIMPLEX
-frame_skip = 2  # Number of frames to skip for increased playback speed
+frame_skip = 4  # Number of frames to skip for increased playback speed
 
 # Check if GPU is available and set device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

@@ -17,8 +17,8 @@ datasetDirectory = path + 'machinevision/project/dataset/'
 definedLabels = path + 'machinevision/project/labels.csv'
 
 # Hyperparameters
-batch_size = 1028
-numEpochs = 50
+batch_size = 32
+numEpochs = 10
 learningRate = 0.001
 
 # Image transformations for training and testing data
@@ -49,6 +49,7 @@ class GTSRBDataset(Dataset):
 model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
 num_ftrs = model.fc.in_features
 model.fc = nn.Linear(num_ftrs, 43)  # 43 classes in GTSRB dataset
+
 
 # Training function
 def trainModel(model, criterion, optimizer, trainLoader, valLoader, epochs):
