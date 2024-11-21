@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
         perror("Failed to open /proc/mydir/myinfo");
         exit(1);
     } else {
-        printf("Opened /proc/mydir/myinfo successfully\n");
+        printf("open successfully by Zaid\n");
     }
 
     // Map the kernel memory to user space
@@ -29,16 +29,14 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    // Read initial data from the mapped memory
-    printf("Initial data in kernel buffer: ");
-    for (int i = 0; i < 12; i++) {
-        printf("%d ", p_map[i]);
+    // Print the contents of the kernel buffer
+    for (int i = 0; i < 12; i++) { // Assuming 12 integers in the buffer
+        printf("%d\n", p_map[i]);
     }
-    printf("\n");
 
-    // Modify the mapped memory
-    strcpy((char *)p_map, "Hello Kernel");
-    printf("Data written to kernel buffer: %s\n", p_map);
+
+    // Print the concluding message
+    printf("Printed by Zaid\n");
 
     // Cleanup
     if (munmap(p_map, PAGE_SIZE) == -1) {
