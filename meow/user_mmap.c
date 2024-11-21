@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Print the contents of the kernel buffer
-    for (int i = 0; i < 12; i++) { // Assuming 12 integers in the buffer
+    for (int i = 0; i < 12; i++) { 
         printf("%d\n", p_map[i]);
     }
 
