@@ -9,6 +9,8 @@
 #include <linux/mm.h>
 #include <linux/fs.h>
 #include <linux/slab.h>
+#include <asm/io.h>
+
 
 static struct proc_dir_entry *tempdir, *tempinfo;
 static unsigned char *buffer; // Kernel buffer
