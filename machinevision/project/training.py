@@ -20,6 +20,18 @@ batch_size = 32
 numEpochs = 50
 learningRate = 0.001
 
+# Device configuration
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# CNN model (ResNet50)
+model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
+num_ftrs = model.fc.in_features
+model.fc = nn.Linear(num_ftrs, 43)  # 43 classes in GTSRB dataset
+# model = models.resnet152(weights=models.ResNet152_Weights.DEFAULT)
+# num_ftrs = model.fc.in_features
+# model.fc = torch.nn.Linear(num_ftrs, 43)
+model.to(device)
+
 # Image transformations for training and testing data
 transform = transforms.Compose([
     transforms.Resize((32, 32)),
@@ -27,25 +39,13 @@ transform = transforms.Compose([
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
-# Device configuration
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# CNN model (ResNet50)
-# model = models.resnet100(weights=models.ResNet100_Weights.DEFAULT)
-# num_ftrs = model.fc.in_features
-# model.fc = nn.Linear(num_ftrs, 43)  # 43 classes in GTSRB dataset
-model = models.resnet152(weights=models.ResNet152_Weights.DEFAULT)
-num_ftrs = model.fc.in_features
-model.fc = torch.nn.Linear(num_ftrs, 43)  # 43 classes in GTSRB dataset
-model.to(device)
-
 # DataLoader Setup with optimized parameters
 trainSet = datasets.GTSRB(root=datasetDirectory, split='train', download=True, transform=transform)
 trainLoader = DataLoader(
     trainSet, 
     batch_size=batch_size, 
     shuffle=True, 
-    num_workers=2,  # Lowering num_workers to reduce disk I/O
+    num_workers=1,  # Lowering num_workers to reduce disk I/O
     persistent_workers=True  # Keeps workers alive across epochs
 )
 
@@ -54,7 +54,7 @@ testLoader = DataLoader(
     testSet, 
     batch_size=batch_size, 
     shuffle=False, 
-    num_workers=2,  # Lowering num_workers to reduce disk I/O
+    num_workers=1,  # Lowering num_workers to reduce disk I/O
     persistent_workers=True  # Keeps workers alive across epochs
 )
 
