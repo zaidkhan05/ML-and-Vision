@@ -31,10 +31,6 @@ cap.set(25, brightness)
 model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
 num_ftrs = model.fc.in_features
 model.fc = torch.nn.Linear(num_ftrs, 43)  # Adjust final layer for 43 classes
-# model = models.resnet152(weights=models.ResNet152_Weights.DEFAULT)
-# num_ftrs = model.fc.in_features
-# model.fc = torch.nn.Linear(num_ftrs, 43)  # 43 classes in GTSRB dataset
-# model.to(device)
 
 # Load the model weights and move the model to GPU if available
 model.load_state_dict(torch.load(modelDirectory, map_location=device, weights_only=True))
