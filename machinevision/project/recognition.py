@@ -8,7 +8,7 @@ import pandas as pd
 
 # Set paths and model configuration
 path = 'D:/ML-and-Vision/'
-modelDirectory = path + 'machinevision/project/model50_25.pth'
+modelDirectory = path + 'machinevision/project/models/model50_18.pth'
 videoPath = path + 'machinevision/project/dataset/inputvideo.mp4'  # Path to your input video
 
 frameWidth = 640
