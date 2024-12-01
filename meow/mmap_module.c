@@ -11,73 +11,92 @@
 #include <linux/slab.h>
 #include <asm/io.h>
 
+// Declare proc directory and file pointers
+static struct proc_dir_entry *tempdir, *tempinfo; // `/proc/mydir` and `/proc/mydir/myinfo`
 
-static struct proc_dir_entry *tempdir, *tempinfo;
-static unsigned char *buffer; // Kernel buffer
-static unsigned char array[12] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+// Kernel buffer for data storage
+static unsigned char *buffer; // Dynamically allocated buffer
+static unsigned char array[12] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}; // Example data to initialize the buffer
 
 // Allocate kernel memory
 static void allocate_memory(void) {
-    buffer = (unsigned char *)kmalloc(PAGE_SIZE, GFP_KERNEL); // Allocate a page-sized buffer
+    // Allocate a page-sized kernel buffer
+    buffer = (unsigned char *)kmalloc(PAGE_SIZE, GFP_KERNEL);
     if (buffer) {
-        SetPageReserved(virt_to_page(buffer)); // Mark the memory as reserved
-        memcpy(buffer, array, sizeof(array)); // Copy initial data into buffer
+        // Mark the allocated memory as reserved to prevent swapping
+        SetPageReserved(virt_to_page(buffer));
+        // Copy predefined data into the allocated buffer
+        memcpy(buffer, array, sizeof(array));
     }
 }
 
 // Free kernel memory
 static void clear_memory(void) {
     if (buffer) {
-        ClearPageReserved(virt_to_page(buffer)); // Unmark the memory as reserved
-        kfree(buffer); // Free the memory
+        // Clear the reserved status for the memory page
+        ClearPageReserved(virt_to_page(buffer));
+        // Free the allocated memory
+        kfree(buffer);
     }
 }
 
-// mmap handler
+// mmap handler: Maps kernel memory to user space
 static int my_map(struct file *filp, struct vm_area_struct *vma) {
-    unsigned long pfn = virt_to_phys((void *)buffer) >> PAGE_SHIFT; // Physical address of the buffer
+    // Get the physical frame number (PFN) for the kernel buffer
+    unsigned long pfn = virt_to_phys((void *)buffer) >> PAGE_SHIFT;
+    
+    // Map the kernel memory to the user space address range
     if (remap_pfn_range(vma, vma->vm_start, pfn, vma->vm_end - vma->vm_start, vma->vm_page_prot)) {
         printk(KERN_ERR "Failed to map kernel memory to user space\n");
-        return -EAGAIN;
+        return -EAGAIN; // Return error if mapping fails
     }
+    
     printk(KERN_INFO "Kernel memory mapped to user space\n");
-    return 0;
+    return 0; // Indicate success
 }
 
-// Define file operations
+// Define file operations structure for the proc file
 static const struct proc_ops myproc_fops = {
-    .proc_mmap = my_map, // Only mmap operation is required
+    .proc_mmap = my_map, // Only mmap operation is implemented
 };
 
-// Initialize the module
+// Module initialization function
 static int __init init_myproc_module(void) {
-    tempdir = proc_mkdir("mydir", NULL); // Create /proc/mydir
+    // Create a directory under /proc
+    tempdir = proc_mkdir("mydir", NULL);
     if (!tempdir) {
         printk(KERN_ERR "Failed to create /proc/mydir\n");
-        return -ENOMEM;
+        return -ENOMEM; // Return error for memory allocation failure
     }
 
-    tempinfo = proc_create("myinfo", 0666, tempdir, &myproc_fops); // Create /proc/mydir/myinfo
+    // Create a file under /proc/mydir
+    tempinfo = proc_create("myinfo", 0666, tempdir, &myproc_fops);
     if (!tempinfo) {
-        remove_proc_entry("mydir", NULL); // Clean up on failure
+        // Remove the directory if file creation fails
+        remove_proc_entry("mydir", NULL);
         printk(KERN_ERR "Failed to create /proc/mydir/myinfo\n");
-        return -ENOMEM;
+        return -ENOMEM; // Return error for memory allocation failure
     }
 
-    allocate_memory(); // Allocate memory for the buffer
+    // Allocate kernel memory for the buffer
+    allocate_memory();
     printk(KERN_INFO "Kernel module initialized successfully\n");
-    return 0;
+    return 0; // Indicate success
 }
 
-// Cleanup the module
+// Module cleanup function
 static void __exit exit_myproc_module(void) {
-    clear_memory(); // Free allocated memory
-    remove_proc_entry("myinfo", tempdir); // Remove /proc/mydir/myinfo
-    remove_proc_entry("mydir", NULL); // Remove /proc/mydir
+    // Free allocated kernel memory
+    clear_memory();
+    
+    // Remove the proc file and directory
+    remove_proc_entry("myinfo", tempdir);
+    remove_proc_entry("mydir", NULL);
+    
     printk(KERN_INFO "Kernel module removed successfully\n");
 }
 
-module_init(init_myproc_module);
-module_exit(exit_myproc_module);
+module_init(init_myproc_module); // Register the initialization function
+module_exit(exit_myproc_module); // Register the cleanup function
 
-MODULE_LICENSE("GPL");
+MODULE_LICENSE("GPL"); // Specify the license for the module
